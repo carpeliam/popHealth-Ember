@@ -1,7 +1,5 @@
-$icon-font-path: "../styles/fonts/"; // Change the path to the fonts
-@import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
+$fa-font-path: "../styles/fonts";
+$icon-font-path: "../styles/fonts/";
 
-/* Put your CSS here */
-html, body {
-    margin: 30px 0;
-}
+@import "fontawesome/scss/font-awesome";
+@import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";

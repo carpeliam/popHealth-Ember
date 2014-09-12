@@ -1,0 +1,1 @@
+PopHealth.ApplicationAdapter = DS.FixtureAdapter

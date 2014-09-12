@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Yeoman Ember Starter Kit</title>
+
+        <!-- build:css styles/main.css -->
+        <link rel="stylesheet" href="styles/style.css">
+        <!-- endbuild -->
+    </head>
+    <body>
+        <!-- build:js(app) scripts/components.js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/handlebars/handlebars.runtime.js"></script>
+        <script src="@@ember"></script>
+        <script src="@@ember_data"></script>
+        <!-- endbuild -->
+
+        <!-- build:js(.tmp) scripts/templates.js -->
+        <script src="scripts/compiled-templates.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js(.tmp) scripts/main.js -->
+        <script src="scripts/combined-scripts.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/plugins.js -->
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/affix.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/modal.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/transition.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/carousel.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/scrollspy.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js"></script>
+        <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tab.js"></script>
+        <!-- endbuild -->
+        <script>
+            PopHealth.initializer({
+                name: 'loadCurrentUser',
+                initialize: function(container) {
+                    var store = container.lookup('store:main');
+                    var user = store.push('user', {"id":"53580848500f03d953000006","admin":true,"agree_license":null,"approved":true,"company":"","company_url":"","disabled":null,"effective_date":null,"email":"lmorley@mitre.org","first_name":"Liam","last_name":"Morley","npi":"","registry_id":"","registry_name":"","staff_role":true,"tin":"","username":"carpeliam","preferences":{"_id":"53580848500f03d953000007","mask_phi_data":false,"population_chart_scaled_to_IPP":false,"selected_measure_ids":["40280381-3D27-5493-013D-4D86B2B36480","40280381-3D27-5493-013D-4BD0BAC05A44","40280381-3E93-D1AF-013E-9E3E037E08D6","40280381-3D27-5493-013D-40EC9FCF4A60","40280381-3D27-5493-013D-4BEBA8855DEB","40280381-3D27-5493-013D-5A665E26122A","40280381-3D27-5493-013D-4BFBD29A5F66","40280381-3D61-56A7-013E-8B8F87F64D63","40280381-3D61-56A7-013E-5D1EF9B76A48","40280381-3D61-56A7-013E-5CC8AA6D6290","40280381-3D61-56A7-013E-6224E2AC25F3","40280381-3D61-56A7-013E-8F2F5AD054E2","40280381-3D61-56A7-013E-5D4001866C09","40280381-3D61-56A7-013E-7AA509DE6258","40280381-3D61-56A7-013E-66BC02DA4DEE","40280381-3E93-D1AF-013E-A36090B72CC8","40280381-3E93-D1AF-013E-A49CA9F94008","40280381-3E93-D1AF-013E-D6E2B772150D","40280381-3E93-D1AF-013E-9F642782222A","40280381-3D61-56A7-013E-5CD94A4D64FA","40280381-3D61-56A7-013E-6649110743CE","40280381-3D61-56A7-013E-65C9C3043E54","40280381-3D61-56A7-013E-62790FE42CA1","40280381-3D61-56A7-013E-5D530FD26D47","40280381-3D61-56A7-013E-62E052273699"],"should_display_circle_visual":true,"user_id":"53580848500f03d953000006"}});
+                    container.optionsForType('user', {instantiate: false});
+                    container.register('user:current', store.find('user', user.id));
+                    container.typeInjection('route', 'currentUser', 'user:current');
+                }
+            });
+            PopHealth.initializer({
+                name: 'loadCategories',
+                initialize: function(container) {
+                    var store = container.lookup('store:main');
+                    store.pushMany('category', [
+                        {"id": "1", "name": "Core", "measures": ["1"]},
+                        {"id": "2", "name": "Acute Myocardial Infarction", "measures": ["2"]}
+                    ]);
+                    store.pushMany('measure', [
+                        {
+                            "id": "1",
+                            "cmsId": "CMS117v2",
+                            "hqmfId": "40280381-3D61-56A7-013E-6224E2AC25F3",
+                            "name": "Childhood Immunization Status",
+                            "description": "Percentage of children 2 years of age who had four diphtheria, tetanus and acellular pertussis (DTaP); three polio (IPV), one measles, mumps and rubella (MMR); three H influenza type B (HiB); three hepatitis B (Hep B); one chicken pox (VZV); four pneumococcal conjugate (PCV); one hepatitis A (Hep A); two or three rotavirus (RV); and two influenza (flu) vaccines by their second birthday.",
+                            "continuousVariable": false,
+                            "episodeOfCare": false
+                        },
+                        {
+                            "id": "2",
+                            "cmsId": "CMS100v2",
+                            "hqmfId": "40280381-3D27-5493-013D-4BFBD29A5F66",
+                            "name": "Aspirin Prescribed at Discharge",
+                            "description": "Acute myocardial infarction (AMI) patients who are prescribed aspirin at hospital discharge",
+                            "continuousVariable": false,
+                            "episodeOfCare": true
+                        }
+                    ]);
+                }
+            });
+        </script>
+    </body>
+</html>

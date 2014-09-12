@@ -7,7 +7,7 @@
   </p>
 
   <div class="panel-group" id="measureSelectors">
-    {{#each categories}}
+    {{#each}}
       <div class="panel panel-default">
         <div class="toggleable panel-heading" data-toggle="collapse" data-parent="#measureSelectors" data-target="#category{{unbound id}}">
           <h4 class="panel-title">
@@ -21,11 +21,11 @@
         <div id="category{{unbound id}}" class="panel-collapse collapse">
           <div class="panel-body">
             <div class="btn-block-container">
-              <a href class="btn btn-checkbox btn-block all{{!#if selected}} active{{!/if}}">Select All</a>
+              <a href {{bind-attr class=":btn :btn-checkbox :btn-block :all isSelected:active"}}>Select All</a>
             </div>
             {{#each measures}}
               <div class="btn-block-container">
-                <a href class="btn btn-checkbox btn-block individual{{!#if selected}} active{{!/if}}">{{cmsId}} - {{name}}</a>
+                <a href {{bind-attr class=":btn :btn-checkbox :btn-block :individual isSelected:active"}}>{{cmsId}} - {{name}}</a>
               </div>
             {{/each}}
           </div>

@@ -1,20 +1,48 @@
 PopHealth.IndexController = Ember.ArrayController.extend
-  itemController: 'category'
-  selectedCategories: (->
-    categories = @get('model')
-    user = @get('user')
-    measureIds = user.get('preferences').selected_measure_ids
-    console.log 'Controller', categories
+  selectedCategories: ( ->
+    categories = @get 'model'
+    measureIds = @get 'currentUser.preferences.selected_measure_ids.[]'
     categories.filter (category) ->
-      console.log category.get('name')
-      category.get('measures').any (measure) ->
-        measureIds.contains measure.get('hqmfId')
-  ).property('user.preferences', 'categories.@each.measures.@each.hqmfId')
+      category.get('measures').any (measure) -> measureIds.contains measure.get('hqmfId')
+  ).property('currentUser.preferences.selected_measure_ids.[]', '@each.measures.@each.hqmfId')
 
-PopHealth.CategoryController = Ember.ObjectController.extend
+PopHealth.DashboardCategoryController = Ember.ObjectController.extend
+  selectedMeasures: ( ->
+    measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
+    @get('model.measures').filter (measure) -> measureIds.contains measure.get('hqmfId')
+  ).property('currentUser.preferences.selected_measure_ids.[]', 'model.measures')
   isSelected: ( ->
-    user = @get 'currentUser'
-    measureIds = user.get('preferences').selected_measure_ids
-    category = @get 'model'
-    category.get('measures').any (measure) -> measureIds.contains measure.get('hqmfId')
-  ).property()
+    @get('selectedMeasures.length') > 0
+  ).property('selectedMeasures.length')
+  isAllSelected: ( ->
+    @get('selectedMeasures.length') == @get('model.measures.length')
+  ).property('selectedMeasures.length', 'model.measures.length')
+  measureCount: ( ->
+    @get 'selectedMeasures.length'
+  ).property('selectedMeasures.length')
+  actions:
+    selectAll: ->
+      selectedIds = @get 'currentUser.preferences.selected_measure_ids.[]'
+      measureIds = @get('model.measures').mapBy 'hqmfId'
+      if @get('isAllSelected')
+        selectedIds = selectedIds.reject (id) -> measureIds.contains id
+      else
+        measureIds.forEach (id) -> selectedIds.push(id) unless selectedIds.contains id
+      @set('currentUser.preferences.selected_measure_ids.[]', selectedIds)
+
+
+PopHealth.DashboardMeasureController = Ember.ObjectController.extend
+  isSelected: ( ->
+    measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
+    measureIds.contains @get('model.hqmfId')
+  ).property('currentUser.preferences.selected_measure_ids.[]')
+  actions:
+    select: ->
+      hqmfId = @get('model.hqmfId')
+      measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
+      if measureIds.contains hqmfId
+        idx = measureIds.indexOf hqmfId
+        measureIds.splice idx, 1
+      else
+        measureIds.push hqmfId
+      @set('currentUser.preferences.selected_measure_ids.[]', measureIds)

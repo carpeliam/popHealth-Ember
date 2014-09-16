@@ -1,9 +1,6 @@
 PopHealth.Category = DS.Model.extend
   name: DS.attr()
   measures: DS.hasMany 'measure'#, async: yes
-  measureCount: ( ->
-    @get('measures').length
-  ).property('measures')
 
 # probably should be mixed-in...
 # PopHealth.Category.reopen
@@ -17,9 +14,9 @@ PopHealth.Category = DS.Model.extend
 PopHealth.Category.FIXTURES = [
   id: 1
   name: 'Core'
-  measures: [1]
+  measures: [1, 2]
 ,
   id: 2
   name: 'Acute Myocardial Infarction'
-  measures: [2]
+  measures: [3]
 ]

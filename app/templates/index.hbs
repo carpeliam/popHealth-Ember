@@ -53,10 +53,10 @@
       <a href="/api/reports/qrda_cat3.xml{{!--#if effective_date}}?effective_date={{effective_date}}{{/if}}{{#if provider_id}}&provider_id={{provider_id}}{{/if--}}" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i> Export</a>
     </div>
   </div>
-  {{#each selectedCategories}}
+  {{#each selectedCategories itemController='dashboard-category'}}
     <h2>{{name}}</h2>
 
-    {{#each measures}}
+    {{#each selectedMeasures}}
       <p>{{name}}</p>
     {{/each}}
 

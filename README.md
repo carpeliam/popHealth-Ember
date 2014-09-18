@@ -1,7 +1,7 @@
 popHealth-Ember
 ===============
 
-This is a re-implementation of the [popHealth](popHealth/popHealth) client side, using Ember instead of Thorax. It's built on top of [Yeoman](http://yeoman.io/) and the [Yeoman Ember generator](https://github.com/yeoman/generator-ember). Basic installment looks like this (and requires Node and Ruby):
+This is a re-implementation of the [popHealth](https://github.com/pophealth/pophealth) client side, using Ember instead of Thorax. It's built on top of [Yeoman](http://yeoman.io/) and the [Yeoman Ember generator](https://github.com/yeoman/generator-ember). Basic installment looks like this (and requires Node and Ruby):
 
     npm install -g yo
     gem install compass

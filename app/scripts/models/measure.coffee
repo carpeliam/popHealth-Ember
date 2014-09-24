@@ -7,6 +7,16 @@ PopHealth.Measure = DS.Model.extend
   continuousVariable: DS.attr()
   episodeOfCare: DS.attr()
   category: DS.belongsTo 'category'#, async: yes
+  subs: DS.attr()
+  submeasures: DS.hasMany 'submeasure'
+  cmsNumber: ( ->
+    matches = @get('cmsId').match(/CMS(\d+)v(\d+)/)
+    matches?[1]
+  ).property 'cmsId'
+  cmsVersion: ( ->
+    matches = @get('cmsId').match(/CMS(\d+)v(\d+)/)
+    matches?[2]
+  ).property 'cmsId'
 
 # probably should be mixed-in...
 # PopHealth.Measure.reopen
@@ -26,6 +36,7 @@ PopHealth.Measure.FIXTURES = [
   continuousVariable: no
   episodeOfCare: no
   category: 1
+  submeasures: []
 ,
   id: 2
   cmsId: 'CMS136v3'
@@ -35,6 +46,7 @@ PopHealth.Measure.FIXTURES = [
   continuousVariable: no
   episodeOfCare: no
   category: 1
+  submeasures: [1, 2]
 ,
   id: 3
   cmsId: 'CMS100v2'
@@ -44,4 +56,5 @@ PopHealth.Measure.FIXTURES = [
   continuousVariable: no
   episodeOfCare: yes
   category: 2
+  submeasures: []
 ]

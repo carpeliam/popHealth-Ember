@@ -55,9 +55,73 @@
   </div>
   {{#each selectedCategories itemController='dashboard-category'}}
     <h2>{{name}}</h2>
+    <div class="category">
+      <div class="category-percent">
+        <div class="title-circle">%</div>
+      </div>
+      <div class="category-fraction">
+        <div class="fraction-listing">
+          <div class="numerator">Numerator</div>
+          <div class="denominator">Denominator</div>
+        </div>
+      </div>
+    </div>
 
-    {{#each selectedMeasures}}
-      <p>{{name}}</p>
+    {{#each measure in selectedMeasures itemController='dashboard-measure'}}
+      {{#if subs}}
+        {{#each subs itemController='dashboard-submeasure'}}
+        <div class="measure">
+          <div class="measure-identifier">
+            {{#if isPrimary}}{{#if cmsId}}
+              <div class="cms-cms">CMS</div>
+              <div class="cms-number">{{measure.cmsNumber}}</div>
+              <div class="cms-version">v{{measure.cmsVersion}}</div>
+            {{/if}}{{/if}}
+          </div>
+          <div {{bind-attr class="isPrimary:measure-info"}}>
+            <div class="measure-title-id">
+              <div class="measure-title" {{bind-attr data-measure-sub=subId}}>
+                {{#if isPrimary}}
+                  {{!FIXME create a helper that wraps link-to for providers/submeasures}}
+                  {{#if providerId}}
+                    {{#link-to 'provider' parentController.hqmfId subId providerId}}{{parentController.name}}{{/link-to}}
+                  {{else}}
+                    {{#link-to 'submeasure' parentController.hqmfId subId}}{{parentController.name}}{{/link-to}}
+                  {{/if}}
+                {{/if}}
+              </div>
+              <div class="measure-subtitle">
+                {{#if providerId}}
+                  {{#link-to 'provider' measure.hqmfId subId providerId}}{{shortSubtitle}}{{/link-to}}
+                {{else}}
+                  {{#link-to 'submeasure' measure.hqmfId subId}}{{shortSubtitle}}{{/link-to}}
+                {{/if}}
+              </div>
+            </div>
+            {{view 'query-results' hqmfId=measure.hqmfId subId=subId}}
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+      <div class="measure">
+        <div class="measure-identifier">
+          {{#if cmsId}}
+            <div class="cms-cms">CMS</div>
+            <div class="cms-number">{{cmsNumber}}</div>
+            <div class="cms-version">v{{cmsVersion}}</div>
+          {{/if}}
+        </div>
+        <div class="measure-info">
+          <div class="measure-title-id">
+            <div class="measure-title">
+              {{#link-to 'measure' hqmfId}}{{name}}{{/link-to}}
+            </div>
+            <div class="measure-subtitle"></div>
+            {{query-results hqmfId=measure.hqmfId}}
+          </div>
+        </div>
+      </div>
+      {{/if}}
     {{/each}}
 
     {{!--#if proportionBasedMeasures.length}}

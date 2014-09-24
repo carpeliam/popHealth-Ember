@@ -11,15 +11,19 @@ PopHealth.DashboardCategoryController = Ember.ObjectController.extend
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
     @get('model.measures').filter (measure) -> measureIds.contains measure.get('hqmfId')
   ).property('currentUser.preferences.selected_measure_ids.[]', 'model.measures')
+
   isSelected: ( ->
     @get('selectedMeasures.length') > 0
   ).property('selectedMeasures.length')
+
   isAllSelected: ( ->
     @get('selectedMeasures.length') == @get('model.measures.length')
   ).property('selectedMeasures.length', 'model.measures.length')
+
   measureCount: ( ->
     @get 'selectedMeasures.length'
   ).property('selectedMeasures.length')
+
   actions:
     selectAll: ->
       selectedIds = @get 'currentUser.preferences.selected_measure_ids.[]'
@@ -36,6 +40,7 @@ PopHealth.DashboardMeasureController = Ember.ObjectController.extend
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
     measureIds.contains @get('model.hqmfId')
   ).property('currentUser.preferences.selected_measure_ids.[]')
+  
   actions:
     select: ->
       hqmfId = @get('model.hqmfId')
@@ -46,3 +51,13 @@ PopHealth.DashboardMeasureController = Ember.ObjectController.extend
       else
         measureIds.push hqmfId
       @set('currentUser.preferences.selected_measure_ids.[]', measureIds)
+
+PopHealth.DashboardSubmeasureController = Ember.ObjectController.extend
+  init: ->
+    store = @get 'store'
+    hqmfId = @parentController.get 'hqmfId'
+    subId = @get 'subId'
+  isPrimary: ( ->
+    subId = @get('subId')
+    !subId? or subId is 'a'
+  ).property('model.subId')

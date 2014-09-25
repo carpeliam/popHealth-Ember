@@ -4,7 +4,7 @@ PopHealth = window.PopHealth = Ember.Application.create
     'hidden.bs.collapse': 'hideCollapse'
 
 
-# Order and include as you please.
+require 'scripts/helpers'
 require 'scripts/controllers/*'
 require 'scripts/store'
 require 'scripts/models/*'

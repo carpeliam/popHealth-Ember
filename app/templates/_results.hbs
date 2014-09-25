@@ -1,0 +1,17 @@
+<div class="percent-listing">
+  <span class="percentage">{{formatNumeral performanceRate '0.[0]a'}}<small>%</small></span>
+</div>
+<div class="row-remainder">
+  <div class="measure-type pull-left">
+    <i class="glyphicon glyphicon-user icon-popover" data-placement="bottom" data-content="Patients" data-trigger="hover focus"></i>
+  </div>
+
+  <div class="fraction-listing pull-left">
+    <div class="numerator">{{formatNumeral numerator '0.[0]a'}}</div>
+    <div class="denominator">{{formatNumeral performanceDenominator '0.[0]a'}}</div>
+  </div>
+
+  <div class="pop-chart pull-left"></div>
+
+  {{#link-to 'patientResults' measure.hqmfId subId class="patient-btn pull-right"}}Patients{{/link-to}}
+</div>

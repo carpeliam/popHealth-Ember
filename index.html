@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Yeoman Ember Starter Kit</title>
+
+        <link rel="stylesheet" href="styles/ade3552f.main.css">
+    </head>
+    <body>
+        <script src="scripts/0a4439bf.components.js"></script>
+
+        <script src="scripts/04b9d579.templates.js"></script>
+
+        <script src="scripts/eb98f9b3.main.js"></script>
+
+        <script src="scripts/036656e4.plugins.js"></script>
+        <script>
+            PopHealth.initializer({
+                name: 'loadCurrentUser',
+                initialize: function(container) {
+                    var store = container.lookup('store:main');
+                    var user = store.push('user', {"id":"53580848500f03d953000006","admin":true,"agree_license":null,"approved":true,"company":"","company_url":"","disabled":null,"effective_date":null,"email":"lmorley@mitre.org","first_name":"Liam","last_name":"Morley","npi":"","registry_id":"","registry_name":"","staff_role":true,"tin":"","username":"carpeliam","preferences":{"_id":"53580848500f03d953000007","mask_phi_data":false,"population_chart_scaled_to_IPP":false,"selected_measure_ids":["40280381-3D61-56A7-013E-6224E2AC25F3","40280381-3D61-56A7-013E-62E052273699"],"should_display_circle_visual":true,"user_id":"53580848500f03d953000006"}});
+                    container.optionsForType('user', {instantiate: false});
+                    container.register('user:current', store.find('user', user.id));
+                    container.typeInjection('controller', 'currentUser', 'user:current');
+                    container.typeInjection('route', 'currentUser', 'user:current');
+                }
+            });
+            PopHealth.initializer({
+                name: 'loadCategories',
+                initialize: function(container) {
+                    var store = container.lookup('store:main');
+                    store.pushMany('category', [
+                        {"id": "1", "name": "Core", "measures": ["1", "2"]},
+                        {"id": "2", "name": "Acute Myocardial Infarction", "measures": ["3"]}
+                    ]);
+                    store.pushMany('measure', [
+                        {
+                            "id": "1",
+                            "cmsId": "CMS117v2",
+                            "hqmfId": "40280381-3D61-56A7-013E-6224E2AC25F3",
+                            "name": "Childhood Immunization Status",
+                            "description": "Percentage of children 2 years of age who had four diphtheria, tetanus and acellular pertussis (DTaP); three polio (IPV), one measles, mumps and rubella (MMR); three H influenza type B (HiB); three hepatitis B (Hep B); one chicken pox (VZV); four pneumococcal conjugate (PCV); one hepatitis A (Hep A); two or three rotavirus (RV); and two influenza (flu) vaccines by their second birthday.",
+                            "continuousVariable": false,
+                            "episodeOfCare": false,
+                            "subs": []
+                        },
+                        {
+                            "id": "2",
+                            "cmsId": "CMS136v3",
+                            "hqmfId": "40280381-3D61-56A7-013E-62E052273699",
+                            "name": "ADHD: Follow-Up Care for Children Prescribed Attention-Deficit/Hyperactivity Disorder (ADHD) Medication",
+                            "description": "Percentage of children 6-12 years of age and newly dispensed a medication for attention-deficit/hyperactivity disorder (ADHD) who had appropriate follow-up care.  Two rates are reported.  \na. Percentage of children who had one follow-up visit with a practitioner with prescribing authority during the 30-Day Initiation Phase.\nb. Percentage of children who remained on ADHD medication for at least 210 days and who, in addition to the visit in the Initiation Phase, had at least two additional follow-up visits with a practitioner within 270 days (9 months) after the Initiation Phase ended.",
+                            "continuousVariable": false,
+                            "episodeOfCare": false,
+                            "subs": [
+                                {"subId": "a", "shortSubtitle": "Visit within 30 days"},
+                                {"subId": "b", "shortSubtitle": "Visit with 2+ followups"}
+                            ]
+                        },
+                        {
+                            "id": "3",
+                            "cmsId": "CMS100v2",
+                            "hqmfId": "40280381-3D27-5493-013D-4BFBD29A5F66",
+                            "name": "Aspirin Prescribed at Discharge",
+                            "description": "Acute myocardial infarction (AMI) patients who are prescribed aspirin at hospital discharge",
+                            "continuousVariable": false,
+                            "episodeOfCare": true,
+                            "subs": []
+                        }
+                    ]);
+                }
+            });
+        </script>
+    </body>
+</html>

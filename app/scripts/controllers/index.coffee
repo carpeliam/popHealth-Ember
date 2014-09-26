@@ -1,5 +1,16 @@
 PopHealth.IndexController = Ember.ArrayController.extend
-  selectedCategories: ( -> [] ).property()
+  selectedCategories: ( ->
+    Ember.ArrayProxy.createWithMixins Ember.SortableMixin,
+      sortProperties: ['name']
+      sortFunction: (a, b) ->
+        if a is 'Core'
+          -1
+        else if b is 'Core'
+          1
+        else
+          Em.compare a, b
+      content: [] # set in updateSelectedMeasures
+  ).property()
   updateSelectedCategories: ( ->
     measureIds = @get 'currentUser.preferences.selected_measure_ids.[]'
     selectedCategories = @get 'selectedCategories'
@@ -37,7 +48,7 @@ PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.exte
     @get('selectedMeasures.length') == @get('measures.length')
   ).property('selectedMeasures.length', 'measures.length')
 
-  measureCount: Ember.computed.oneWay('selectedMeasures.length')
+  measureCount: Em.computed.oneWay('selectedMeasures.length')
 
   actions:
     selectAll: ->
@@ -86,12 +97,12 @@ PopHealth.Pollable = Ember.Mixin.create
   interval: ( -> 3000 ).property().readOnly()
 
   schedule: (f) ->
-    Ember.run.later this, ->
+    Em.run.later this, ->
       f.apply this
       @set 'queryTimer', @schedule f
     , @get 'interval'
 
-  stop: -> Ember.run.cancel @get('queryTimer')
+  stop: -> Em.run.cancel @get('queryTimer')
   willDestroy: -> @stop()
   # start: -> @set 'timer', @schedule @get('onPoll')
   onPoll: ->

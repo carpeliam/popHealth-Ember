@@ -48,7 +48,7 @@
     {{#each measure in selectedMeasures itemController='dashboard-measure-result'}}
       {{#if subs}}
         {{#each subs itemController='dashboard-submeasure'}}
-          <div class="measure">
+          <div {{bind-attr class=":measure isPopulated::loading"}}>
             <div class="measure-identifier">
               {{#if isPrimary}}{{#if measure.cmsId}}
                 <div class="cms-cms">CMS</div>
@@ -72,7 +72,7 @@
           </div>
         {{/each}}
       {{else}}
-        <div class="measure">
+        <div {{bind-attr class=":measure isPopulated::loading"}}>
           <div class="measure-identifier">
             {{#if cmsId}}
               <div class="cms-cms">CMS</div>

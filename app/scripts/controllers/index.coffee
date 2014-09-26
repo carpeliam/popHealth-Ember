@@ -109,6 +109,7 @@ PopHealth.Pollable = Ember.Mixin.create
     query = @get 'query'
     if query.get('isPopulated') then @stop() else query.reload()
 
+  isPopulated: Em.computed.oneWay('query.isPopulated')
   numerator: ( ->
     if @get('query.isPopulated') then @get('query.result.NUMER') else 0
   ).property('query.isPopulated', 'query.result.NUMER')

@@ -21,6 +21,10 @@ body {
 
 .measure {
   @extend .row;
+  &.loading {
+    opacity: 0.5;
+  }
+  @include transition(opacity 0.5s);
   .measure-title-id {
     // .make-xs-column(3);
     @include make-xs-column(5, 0); // use gutter of 0, to eliminate left gutter

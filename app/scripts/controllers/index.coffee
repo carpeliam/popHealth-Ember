@@ -1,17 +1,28 @@
 PopHealth.IndexController = Ember.ArrayController.extend
-  selectedCategories: ( ->
-    categories = @get 'model'
+  selectedCategories: ( -> [] ).property()
+  updateSelectedCategories: ( ->
     measureIds = @get 'currentUser.preferences.selected_measure_ids.[]'
-    categories.filter (category) ->
-      category.get('measures').any (measure) -> measureIds.contains measure.get('hqmfId')
-  ).property('currentUser.preferences.selected_measure_ids.[]', '@each.measures.@each.hqmfId')
+    selectedCategories = @get 'selectedCategories'
+    @forEach (category) ->
+      if category.get('measures').any((measure) -> measureIds.contains measure.get('hqmfId'))
+        selectedCategories.addObject(category) unless selectedCategories.contains category
+      else
+        selectedCategories.removeObject(category)
+  ).observes('currentUser.preferences.selected_measure_ids.[]', 'model.length', '@each.measures.length').on('init')
 
 
 PopHealth.DashboardCategoryController = Ember.ObjectController.extend
-  selectedMeasures: ( ->
+  selectedMeasures: ( -> [] ).property()
+  updateSelectedMeasures: ( ->
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
-    @get('model.measures').filter (measure) -> measureIds.contains measure.get('hqmfId')
-  ).property('currentUser.preferences.selected_measure_ids.[]', 'model.measures')
+    selectedMeasures = @get 'selectedMeasures'
+    @get('measures').forEach (measure) ->
+      if measureIds.contains measure.get('hqmfId')
+        selectedMeasures.addObject(measure) unless selectedMeasures.contains measure
+      else
+        selectedMeasures.removeObject(measure)
+    selectedMeasures.sortBy 'cmsId'
+  ).observes('currentUser.preferences.selected_measure_ids.[]', 'measures.length').on('init')
 
 PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.extend
   isOpen: no # by default; view listens for open/close event and sets this accordingly
@@ -20,17 +31,15 @@ PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.exte
   ).property('selectedMeasures.length')
 
   isAllSelected: ( ->
-    @get('selectedMeasures.length') == @get('model.measures.length')
-  ).property('selectedMeasures.length', 'model.measures.length')
+    @get('selectedMeasures.length') == @get('measures.length')
+  ).property('selectedMeasures.length', 'measures.length')
 
-  measureCount: ( ->
-    @get 'selectedMeasures.length'
-  ).property('selectedMeasures.length')
+  measureCount: Ember.computed.oneWay('selectedMeasures.length')
 
   actions:
     selectAll: ->
       selectedIds = @get 'currentUser.preferences.selected_measure_ids.[]'
-      measureIds = @get('model.measures').mapBy 'hqmfId'
+      measureIds = @get('measures').mapBy 'hqmfId'
       if @get('isAllSelected')
         selectedIds = selectedIds.reject (id) -> measureIds.contains id
       else
@@ -41,26 +50,24 @@ PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.exte
 PopHealth.DashboardMeasureController = Ember.ObjectController.extend
   isSelected: ( ->
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
-    measureIds.contains @get('model.hqmfId')
+    measureIds.contains @get('hqmfId')
   ).property('currentUser.preferences.selected_measure_ids.[]')
 
   actions:
     select: ->
-      hqmfId = @get('model.hqmfId')
+      hqmfId = @get('hqmfId')
       measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
       if measureIds.contains hqmfId
-        idx = measureIds.indexOf hqmfId
-        measureIds.splice idx, 1
+        measureIds.removeObject hqmfId
       else
-        measureIds.push hqmfId
+        measureIds.addObject hqmfId
       @set('currentUser.preferences.selected_measure_ids.[]', measureIds)
 
 
 
 
 PopHealth.Pollable = Ember.Mixin.create
-  init: ->
-    @_super()
+  createQuery: ( ->
     hqmfId = @get('hqmfId') or @parentController.get('hqmfId')
     subId = @get 'subId'
 
@@ -69,18 +76,20 @@ PopHealth.Pollable = Ember.Mixin.create
       subId: subId
     # query.save() # FixtureAdapter isn't smart enough for this, remove for RESTAdapter
     @set 'query', query
-    
-    @set 'timer', @schedule @get('onPoll')
+
+    @set 'queryTimer', @schedule @get('onPoll')
+  ).on('init')
 
   interval: ( -> 3000 ).property().readOnly()
 
   schedule: (f) ->
     Ember.run.later this, ->
       f.apply this
-      @set 'timer', @schedule f
+      @set 'queryTimer', @schedule f
     , @get 'interval'
 
-  stop: -> Ember.run.cancel @get('timer')
+  stop: -> Ember.run.cancel @get('queryTimer')
+  willDestroy: -> @stop()
   # start: -> @set 'timer', @schedule @get('onPoll')
   onPoll: ->
     query = @get 'query'
@@ -113,4 +122,4 @@ PopHealth.DashboardSubmeasureController = Ember.ObjectController.extend PopHealt
   isPrimary: ( ->
     subId = @get('subId')
     !subId? or subId is 'a'
-  ).property('model.subId')
+  ).property('subId')

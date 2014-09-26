@@ -12,7 +12,11 @@ PopHealth.IndexController = Ember.ArrayController.extend
 
 
 PopHealth.DashboardCategoryController = Ember.ObjectController.extend
-  selectedMeasures: ( -> [] ).property()
+  selectedMeasures: ( ->
+    Ember.ArrayProxy.createWithMixins Ember.SortableMixin,
+      sortProperties: ['cmsId']
+      content: [] # set in updateSelectedMeasures
+  ).property()
   updateSelectedMeasures: ( ->
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
     selectedMeasures = @get 'selectedMeasures'
@@ -21,7 +25,6 @@ PopHealth.DashboardCategoryController = Ember.ObjectController.extend
         selectedMeasures.addObject(measure) unless selectedMeasures.contains measure
       else
         selectedMeasures.removeObject(measure)
-    selectedMeasures.sortBy 'cmsId'
   ).observes('currentUser.preferences.selected_measure_ids.[]', 'measures.length').on('init')
 
 PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.extend

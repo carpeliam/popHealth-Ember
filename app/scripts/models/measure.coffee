@@ -1,4 +1,3 @@
-# global Ember
 PopHealth.Measure = DS.Model.extend
   cmsId: DS.attr()
   hqmfId: DS.attr()
@@ -7,16 +6,17 @@ PopHealth.Measure = DS.Model.extend
   continuousVariable: DS.attr()
   episodeOfCare: DS.attr()
   category: DS.belongsTo 'category'#, async: yes
+  subs: DS.attr()
+  cmsNumber: ( ->
+    matches = @get('cmsId').match(/CMS(\d+)v(\d+)/)
+    matches?[1]
+  ).property 'cmsId'
+  cmsVersion: ( ->
+    matches = @get('cmsId').match(/CMS(\d+)v(\d+)/)
+    matches?[2]
+  ).property 'cmsId'
 
-# probably should be mixed-in...
-# PopHealth.Measure.reopen
-#   attributes: ( ->
-#     Ember.keys(@get('data')).map (key) =>
-#       Em.Object.create model: this, key: key, valueBinding: "model.#{key}"
-#   ).property()
 
-
-# delete below here if you do not want fixtures
 PopHealth.Measure.FIXTURES = [
   id: 1
   cmsId: 'CMS117v2'
@@ -26,6 +26,7 @@ PopHealth.Measure.FIXTURES = [
   continuousVariable: no
   episodeOfCare: no
   category: 1
+  submeasures: []
 ,
   id: 2
   cmsId: 'CMS136v3'
@@ -35,6 +36,7 @@ PopHealth.Measure.FIXTURES = [
   continuousVariable: no
   episodeOfCare: no
   category: 1
+  submeasures: [1, 2]
 ,
   id: 3
   cmsId: 'CMS100v2'
@@ -44,4 +46,5 @@ PopHealth.Measure.FIXTURES = [
   continuousVariable: no
   episodeOfCare: yes
   category: 2
+  submeasures: []
 ]

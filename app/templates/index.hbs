@@ -7,30 +7,8 @@
   </p>
 
   <div class="panel-group" id="measureSelectors">
-    {{#each itemController='dashboard-category'}}
-      <div class="panel panel-default">
-        <div class="toggleable panel-heading" data-toggle="collapse" data-parent="#measureSelectors" data-target="#category{{unbound id}}">
-          <h4 class="panel-title">
-            <div class="selection-pull-out">
-              <span class="measure-count">{{measureCount}}</span>
-              <i class="panel-chevron glyphicon glyphicon-chevron-right"></i>
-            </div>
-            {{name}}
-          </h4>
-        </div>
-        <div id="category{{unbound id}}" class="panel-collapse collapse">
-          <div class="panel-body">
-            <div class="btn-block-container">
-              <a {{action 'selectAll'}} {{bind-attr class=":btn :btn-checkbox :btn-block :all isAllSelected:active"}}>Select All</a>
-            </div>
-            {{#each measures itemController='dashboard-measure'}}
-              <div class="btn-block-container">
-                <a {{action 'select'}} {{bind-attr class=":btn :btn-checkbox :btn-block :individual isSelected:active"}}>{{cmsId}} - {{name}}</a>
-              </div>
-            {{/each}}
-          </div>
-        </div>
-      </div>
+    {{#each}}
+      {{render 'sidebar-category' this}}
     {{/each}}
   </div>
 </div>
@@ -55,9 +33,64 @@
   </div>
   {{#each selectedCategories itemController='dashboard-category'}}
     <h2>{{name}}</h2>
+    <div class="category">
+      <div class="category-percent">
+        <div class="title-circle">%</div>
+      </div>
+      <div class="category-fraction">
+        <div class="fraction-listing">
+          <div class="numerator">Numerator</div>
+          <div class="denominator">Denominator</div>
+        </div>
+      </div>
+    </div>
 
-    {{#each selectedMeasures}}
-      <p>{{name}}</p>
+    {{#each measure in selectedMeasures itemController='dashboard-measure-result'}}
+      {{#if subs}}
+        {{#each subs itemController='dashboard-submeasure'}}
+          <div class="measure">
+            <div class="measure-identifier">
+              {{#if isPrimary}}{{#if measure.cmsId}}
+                <div class="cms-cms">CMS</div>
+                <div class="cms-number">{{measure.cmsNumber}}</div>
+                <div class="cms-version">v{{measure.cmsVersion}}</div>
+              {{/if}}{{/if}}
+            </div>
+            <div {{bind-attr class="isPrimary:measure-info"}}>
+              <div class="measure-title-id">
+                <div class="measure-title" {{bind-attr data-measure-sub=subId}}>
+                  {{#if isPrimary}}
+                    {{#link-to 'submeasure' parentController.hqmfId subId}}{{parentController.name}}{{/link-to}}
+                  {{/if}}
+                </div>
+                <div class="measure-subtitle">
+                  {{#link-to 'submeasure' measure.hqmfId subId}}{{shortSubtitle}}{{/link-to}}
+                </div>
+              </div>
+              {{partial 'results'}}
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <div class="measure">
+          <div class="measure-identifier">
+            {{#if cmsId}}
+              <div class="cms-cms">CMS</div>
+              <div class="cms-number">{{cmsNumber}}</div>
+              <div class="cms-version">v{{cmsVersion}}</div>
+            {{/if}}
+          </div>
+          <div class="measure-info">
+            <div class="measure-title-id">
+              <div class="measure-title">
+                {{#link-to 'measure' hqmfId}}{{name}}{{/link-to}}
+              </div>
+              <div class="measure-subtitle"></div>
+            </div>
+            {{partial 'results'}}
+          </div>
+        </div>
+      {{/if}}
     {{/each}}
 
     {{!--#if proportionBasedMeasures.length}}

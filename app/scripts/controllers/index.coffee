@@ -6,12 +6,15 @@ PopHealth.IndexController = Ember.ArrayController.extend
       category.get('measures').any (measure) -> measureIds.contains measure.get('hqmfId')
   ).property('currentUser.preferences.selected_measure_ids.[]', '@each.measures.@each.hqmfId')
 
+
 PopHealth.DashboardCategoryController = Ember.ObjectController.extend
   selectedMeasures: ( ->
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
     @get('model.measures').filter (measure) -> measureIds.contains measure.get('hqmfId')
   ).property('currentUser.preferences.selected_measure_ids.[]', 'model.measures')
 
+PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.extend
+  isOpen: no # by default; view listens for open/close event and sets this accordingly
   isSelected: ( ->
     @get('selectedMeasures.length') > 0
   ).property('selectedMeasures.length')
@@ -40,7 +43,7 @@ PopHealth.DashboardMeasureController = Ember.ObjectController.extend
     measureIds = @get('currentUser.preferences.selected_measure_ids.[]')
     measureIds.contains @get('model.hqmfId')
   ).property('currentUser.preferences.selected_measure_ids.[]')
-  
+
   actions:
     select: ->
       hqmfId = @get('model.hqmfId')

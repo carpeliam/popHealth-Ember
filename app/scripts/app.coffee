@@ -1,4 +1,8 @@
-PopHealth = window.PopHealth = Ember.Application.create()
+PopHealth = window.PopHealth = Ember.Application.create
+  customEvents:
+    'show.bs.collapse': 'showCollapse'
+    'hidden.bs.collapse': 'hideCollapse'
+
 
 # Order and include as you please.
 require 'scripts/controllers/*'

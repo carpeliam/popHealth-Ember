@@ -7,30 +7,8 @@
   </p>
 
   <div class="panel-group" id="measureSelectors">
-    {{#each itemController='dashboard-category'}}
-      <div class="panel panel-default">
-        <div class="toggleable panel-heading" data-toggle="collapse" data-parent="#measureSelectors" data-target="#category{{unbound id}}">
-          <h4 class="panel-title">
-            <div class="selection-pull-out">
-              <span class="measure-count">{{measureCount}}</span>
-              <i class="panel-chevron glyphicon glyphicon-chevron-right"></i>
-            </div>
-            {{name}}
-          </h4>
-        </div>
-        <div id="category{{unbound id}}" class="panel-collapse collapse">
-          <div class="panel-body">
-            <div class="btn-block-container">
-              <a {{action 'selectAll'}} {{bind-attr class=":btn :btn-checkbox :btn-block :all isAllSelected:active"}}>Select All</a>
-            </div>
-            {{#each measures itemController='dashboard-measure'}}
-              <div class="btn-block-container">
-                <a {{action 'select'}} {{bind-attr class=":btn :btn-checkbox :btn-block :individual isSelected:active"}}>{{cmsId}} - {{name}}</a>
-              </div>
-            {{/each}}
-          </div>
-        </div>
-      </div>
+    {{#each}}
+      {{render 'sidebar-category' this}}
     {{/each}}
   </div>
 </div>

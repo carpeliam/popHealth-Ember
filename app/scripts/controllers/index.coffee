@@ -40,10 +40,7 @@ PopHealth.DashboardCategoryController = Ember.ObjectController.extend
 
 PopHealth.SidebarCategoryController = PopHealth.DashboardCategoryController.extend
   isOpen: no # by default; view listens for open/close event and sets this accordingly
-  isSelected: ( ->
-    @get('selectedMeasures.length') > 0
-  ).property('selectedMeasures.length')
-
+  isSelected: Em.computed.gt 'selectedMeasures.length', 0
   isAllSelected: ( ->
     @get('selectedMeasures.length') == @get('measures.length')
   ).property('selectedMeasures.length', 'measures.length')
@@ -110,6 +107,7 @@ PopHealth.Pollable = Ember.Mixin.create
     if query.get('isPopulated') then @stop() else query.reload()
 
   isPopulated: Em.computed.oneWay('query.isPopulated')
+  # numerator: Em.computed.defaultTo('query.result.NUMER'), 0 # is this good enough?
   numerator: ( ->
     if @get('query.isPopulated') then @get('query.result.NUMER') else 0
   ).property('query.isPopulated', 'query.result.NUMER')

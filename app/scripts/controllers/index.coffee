@@ -88,23 +88,21 @@ PopHealth.Pollable = Ember.Mixin.create
     # query.save() # FixtureAdapter isn't smart enough for this, remove for RESTAdapter
     @set 'query', query
 
-    @set 'queryTimer', @schedule @get('onPoll')
+    @poll()
   ).on('init')
 
   interval: ( -> 3000 ).property().readOnly()
 
-  schedule: (f) ->
-    Em.run.later this, ->
-      f.apply this
-      @set 'queryTimer', @schedule f
-    , @get 'interval'
-
   stop: -> Em.run.cancel @get('queryTimer')
   willDestroy: -> @stop()
   # start: -> @set 'timer', @schedule @get('onPoll')
-  onPoll: ->
+  poll: ->
     query = @get 'query'
-    if query.get('isPopulated') then @stop() else query.reload()
+    if query.get('isPopulated')
+      @stop()
+    else
+      query.reload()
+      @set 'queryTimer', Em.run.later this, @poll, @get('interval')
 
   isPopulated: Em.computed.oneWay('query.isPopulated')
   # numerator: Em.computed.defaultTo('query.result.NUMER'), 0 # is this good enough?

@@ -6,6 +6,25 @@ PopHealth.Query = DS.Model.extend
   isPopulated: ( ->
     @get('status.state') in ['completed']
   ).property('status.state')
+  # numerator: Em.computed.defaultTo('result.NUMER'), 0 # is this good enough?
+  numerator: ( ->
+    if @get('isPopulated') then @get('result.NUMER') else 0
+  ).property('isPopulated', 'result.NUMER')
+  denominator: ( ->
+    if @get('isPopulated') then @get('result.DENOM') else 0
+  ).property('isPopulated', 'result.DENOM')
+  exceptions: ( ->
+    if @get('isPopulated') then @get('result.DENEXCEP') else 0
+  ).property('isPopulated', 'result.DENEXCEP')
+  exclusions: ( ->
+    if @get('isPopulated') then @get('result.DENEX') else 0
+  ).property('isPopulated', 'result.DENEX')
+  performanceDenominator: ( ->
+    @get('denominator') - @get('exceptions') - @get('exclusions')
+  ).property('denominator', 'exceptions', 'exclusions')
+  performanceRate: ( ->
+    Math.round(100 * @get('numerator') / Math.max(1, @get('performanceDenominator')))
+  ).property('numerator', 'performanceDenominator')
 
 
 # These get 'created' on the server

@@ -46,31 +46,29 @@
     </div>
 
     {{#each measure in selectedMeasures itemController='dashboard-measure-result'}}
-      {{#if subs}}
-        {{#each subs itemController='dashboard-submeasure'}}
-          <div {{bind-attr class=":measure isPopulated::loading"}}>
-            <div class="measure-identifier">
-              {{#if isPrimary}}{{#if measure.cmsId}}
-                <div class="cms-cms">CMS</div>
-                <div class="cms-number">{{measure.cmsNumber}}</div>
-                <div class="cms-version">v{{measure.cmsVersion}}</div>
-              {{/if}}{{/if}}
-            </div>
-            <div {{bind-attr class="isPrimary:measure-info"}}>
-              <div class="measure-title-id">
-                <div class="measure-title" {{bind-attr data-measure-sub=subId}}>
-                  {{#if isPrimary}}
-                    {{#link-to 'submeasure' parentController.hqmfId subId}}{{parentController.name}}{{/link-to}}
-                  {{/if}}
-                </div>
-                <div class="measure-subtitle">
-                  {{#link-to 'submeasure' measure.hqmfId subId}}{{shortSubtitle}}{{/link-to}}
-                </div>
-              </div>
-              {{partial 'results'}}
-            </div>
+      {{#each measure.subs itemController='dashboard-submeasure'}}
+        <div {{bind-attr class=":measure isPopulated::loading"}}>
+          <div class="measure-identifier">
+            {{#if isPrimary}}{{#if measure.cmsId}}
+              <div class="cms-cms">CMS</div>
+              <div class="cms-number">{{measure.cmsNumber}}</div>
+              <div class="cms-version">v{{measure.cmsVersion}}</div>
+            {{/if}}{{/if}}
           </div>
-        {{/each}}
+          <div {{bind-attr class="isPrimary:measure-info"}}>
+            <div class="measure-title-id">
+              <div class="measure-title" {{bind-attr data-measure-sub=subId}}>
+                {{#if isPrimary}}
+                  {{#link-to 'submeasure' measure.hqmfId subId}}{{measure.name}}{{/link-to}}
+                {{/if}}
+              </div>
+              <div class="measure-subtitle">
+                {{#link-to 'submeasure' measure.hqmfId subId}}{{shortSubtitle}}{{/link-to}}
+              </div>
+            </div>
+            {{partial 'results'}}
+          </div>
+        </div>
       {{else}}
         <div {{bind-attr class=":measure isPopulated::loading"}}>
           <div class="measure-identifier">
@@ -90,7 +88,7 @@
             {{partial 'results'}}
           </div>
         </div>
-      {{/if}}
+      {{/each}}
     {{/each}}
 
     {{!--#if proportionBasedMeasures.length}}
